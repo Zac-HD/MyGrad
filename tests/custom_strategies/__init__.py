@@ -53,12 +53,9 @@ def choices(seq, size, replace=True):
         raise ValueError("`size` must not exceed the length of `seq` when `replace` is `False`")
     if size > len(seq) and not seq:
         raise ValueError("`size` must be 0, given an empty `seq`")
-    inds = list(range(len(seq)))
-    if replace or size == 0:
-        strat = st.tuples(*[st.sampled_from(inds)]*size)
-    else:
-        strat = st.permutations(inds)
-    return strat.map(lambda x: tuple(seq[i] for i in x[:size]))
+    return st.just(()) if not seq else st.lists(
+        st.sampled_from(seq), min_size=size, max_size=size, unique=not replace
+    ).map(tuple)
 
 
 @st.composite
@@ -224,7 +221,7 @@ def integer_index(size):
 
 
 @st.composite
-def slice_index(draw, size, 
+def slice_index(draw, size,
                 min_start=None, max_start=None,
                 min_stop=None, max_stop=None,
                 min_step=1, max_step=2, negative_step=True):
