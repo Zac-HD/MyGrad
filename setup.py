@@ -54,6 +54,6 @@ setup(name=DISTNAME,
       },
       url=URL,
       download_url="https://github.com/rsokl/mygrad/tarball/"+versioneer.get_version(),
-      python_requires='!=2.*,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*',
+      python_requires='>=3.5',
       packages=find_packages(exclude=["tests", "tests.*"]),
       )
