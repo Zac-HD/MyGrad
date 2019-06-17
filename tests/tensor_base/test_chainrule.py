@@ -32,3 +32,4 @@ def test_chainrule_scalar(x, y, z, side_effects):
     assert_allclose(z.grad, f.data**2 + z.data * 2 * f.data)
 
     assert w.grad is None
+    assert unused is not None
