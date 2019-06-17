@@ -52,12 +52,12 @@ def test_reduce_broadcast_nokeepdim(var_shape, data):
        data=st.data())
 def test_reduce_broadcast_keepdim(var_shape, data):
     """ example broadcasting: (2, 1, 4) -> (2, 5, 4)"""
-    grad = data.draw(hnp.arrays(dtype=float,
-                     shape=broadcastable_shape(shape=var_shape,
-                                               min_dim=len(var_shape),
-                                               max_dim=len(var_shape)),
-                                               elements=st.just(1.)),
-                     label='grad')
+    shape_st = hnp.broadcastable_shapes(
+        shape=var_shape, min_dims=len(var_shape), max_dims=len(var_shape)
+    )
+    grad = data.draw(
+        hnp.arrays(dtype=float, shape=shape_st, elements=st.just(1.)), label='grad'
+    )
 
     reduced_grad = reduce_broadcast(grad=grad, var_shape=var_shape)
     assert reduced_grad.shape == tuple(i if i < j else j for i, j in zip(var_shape, grad.shape))

@@ -4,7 +4,7 @@ from mygrad import transpose, moveaxis, swapaxes, squeeze, expand_dims, ravel, b
 from numpy.testing import assert_allclose
 import numpy as np
 
-from .custom_strategies import valid_axes, broadcastable_shape
+from .custom_strategies import valid_axes
 from .utils.numerical_gradient import numerical_gradient_full
 from .wrappers.uber import fwdprop_test_factory, backprop_test_factory
 
@@ -222,7 +222,7 @@ def _is_broadcastable(*arrs, **kwargs):
 @fwdprop_test_factory(mygrad_func=broadcast_to, true_func=np.broadcast_to,
                       num_arrays=1,
                       index_to_arr_shapes={0: hnp.array_shapes(min_dims=0)},
-                      kwargs=dict(shape=lambda arr: broadcastable_shape(arr.shape, min_dim=arr.ndim)),
+                      kwargs=dict(shape=lambda arr: hnp.broadcastable_shapes(arr.shape, min_dims=arr.ndim)),
                       assumptions=_is_broadcastable)
 def test_broadcast_to_fwd():
     pass
@@ -231,7 +231,7 @@ def test_broadcast_to_fwd():
 @backprop_test_factory(mygrad_func=broadcast_to, true_func=np.broadcast_to,
                        num_arrays=1, vary_each_element=True,
                        index_to_arr_shapes={0: hnp.array_shapes(min_dims=0)},
-                       kwargs=dict(shape=lambda arr: broadcastable_shape(arr.shape, min_dim=arr.ndim)),
+                       kwargs=dict(shape=lambda arr: hnp.broadcastable_shapes(arr.shape, min_dims=arr.ndim)),
                        assumptions=_is_broadcastable)
 def test_broadcast_to_bkwd():
     pass

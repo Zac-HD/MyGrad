@@ -1,13 +1,13 @@
 from mygrad import matmul
 
 from tests.wrappers.uber import fwdprop_test_factory, backprop_test_factory
-from tests.custom_strategies import broadcastable_shape
 
 import numpy as np
 from numpy.testing import assert_almost_equal
 
 import hypothesis.strategies as st
 from hypothesis import settings
+from hypothesis.extra.numpy import broadcastable_shapes
 
 
 @st.composite
@@ -20,7 +20,7 @@ def special_shape(draw, static_shape, shape=tuple(), min_dim=0, max_dim=5):
         -------
         hypothesis.searchstrategy.SearchStrategy
             -> Tuple[int, ...]"""
-    return draw(broadcastable_shape(shape, min_dim, max_dim)) + static_shape
+    return draw(broadcastable_shapes(shape, min_dim, max_dim)) + static_shape
 
 
 @fwdprop_test_factory(mygrad_func=matmul, true_func=np.matmul,

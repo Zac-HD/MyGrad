@@ -298,7 +298,7 @@ def test_redundant_args():
        data=st.data())
 def test_einsum_bkwd1(num, optimize, data):
     x = Tensor(np.random.rand(num))
-    y_shape = data.draw(broadcastable_shape(x.shape, min_dim=1, max_dim=1))
+    y_shape = data.draw(hnp.broadcastable_shapes(x.shape, min_dims=1, max_dims=1))
     y = Tensor(np.random.rand(*y_shape))
 
     grad = data.draw(st.floats(-100, 100))
@@ -335,7 +335,7 @@ def test_einsum_bkwd2(num, optimize, data):
     y = Tensor(np.random.rand(num))
 
     # flip so that leading dim of x is broadcastable with y
-    x_shape = data.draw(broadcastable_shape(y.shape, min_dim=2, max_dim=2))[::-1]
+    x_shape = data.draw(hnp.broadcastable_shapes(y.shape, min_dims=2, max_dims=2))[::-1]
     x = Tensor(np.random.rand(*x_shape))
     grad = np.random.rand(x.shape[-1])
 
@@ -385,7 +385,7 @@ def test_einsum_bkwd4(shape, optimize, data):
 
     x = Tensor(np.random.rand(*shape))
 
-    y_shape = data.draw(broadcastable_shape(x.shape[:1], min_dim=1, max_dim=1))
+    y_shape = data.draw(hnp.broadcastable_shapes(x.shape[:1], min_dims=1, max_dims=1))
     y = Tensor(np.random.rand(*y_shape))
 
     grad = np.random.rand(1).item()
